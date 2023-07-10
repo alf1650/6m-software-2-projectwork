@@ -6,16 +6,17 @@ import Table from './components/Table';
 // import AddForm from './components/AddForm';
 
 function App() {
-  const [holidayData, setHolidayData] = useState([]);
+  const [countryData, setCountryData] = useState([]);
   const apiGet = async () => {
     try {
-      const response = await mockAPI.get(`/holidays?&api_key=e6bc2f9624d494ca421477e718736a0b6ec483b4&country=AI&year=2024`);
+      // const response = await mockAPI.get(`/holidays?&api_key=e6bc2f9624d494ca421477e718736a0b6ec483b4&country=AI&year=2024`);
+      const response = await mockAPI.get(`/countries?&api_key=e6bc2f9624d494ca421477e718736a0b6ec483b4`);    
       console.log("response.data", response.data);
-      setHolidayData(response.data.response.holidays);
+      setCountryData(response.data.response.countries);
       //console.log(response.data.items[0])
       //console.log(response.data.items[1])
-      console.log("holidayData", holidayData)
-      console.log("holidayData.name", holidayData[0])
+      // console.log("holidayData", holidayData)
+      // console.log("holidayData.name", holidayData[0])
       // console.log("weatherData.api_info", weatherData.api_info)
       // console.log("weatherData.items[0]", weatherData.items[0])
       // console.log("weatherData.items[0].forecasts", weatherData.items[0].forecasts[0])
@@ -88,13 +89,13 @@ function App() {
     
 
     <div className="App">
-      <h1>Holiday Data</h1>
+      <h1>ISO 3166 Data</h1>
       {/* <AddForm handlerAddItem={apiPost} />  */}
       {/* <button onClick={() => apiPost(50)}>Post Products</button> */}
       {/* <button onClick={() => apiGet(50)}>Show Products</button> */}
-      <button onClick={apiGet}>Load Holiday Data</button>
+      <button onClick={apiGet}>Load ISO 3166 Data</button>
       {/* <button onClick={() => apiPut(50)}>Update Products</button> */}
-      <Table list={holidayData} />
+      <Table list={countryData} />
 
       {/* {weatherData.items[0].forecasts.map((forecast, index) => (
               <tr key={index}>

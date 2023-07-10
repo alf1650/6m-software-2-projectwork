@@ -38,23 +38,18 @@ function Table({ list }) {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Country</th>
-            <th>Date</th>
-
+            <th>Country Name</th>
+            <th>ISO 3166</th>
+            <th>Total Holidays</th>
           </tr>
         </thead>
         <tbody>
           {list &&
             list.map((item) => (
               <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.description}</td>
-                <td>{item.type}</td>
-                <td>{item.country.name}</td>
-                <td>{item.date.iso}</td>
+                <td>{item.country_name}</td>
+                <td>{item['iso-3166']}</td> {/* Use bracket notation */}
+                <td>{item.total_holidays}</td>
               </tr>
             ))}
         </tbody>
