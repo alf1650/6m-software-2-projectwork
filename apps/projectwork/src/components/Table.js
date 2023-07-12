@@ -1,35 +1,3 @@
-// components/table.js
-// function Table({ list }) {
-//     return (
-//       <div>
-//         <p>{list && list[0] && list[0].name}</p>
-//       </div>
-//     );
-//   }
-//   export default Table;
-
-// import styles from "./Table.module.css";
-// function Table({ data }) {
-//   return (
-//     <div>
-//       <table className={styles.table}>
-//         <thead>
-//           <tr>
-//             <th>Date</th>
-//             <th>Forecast</th>
-//           </tr>
-//         </thead>
-  
-//           <tr>
-//           <td>{data.date}</td>
-//           <td>{data.forecast}</td>
-//           </tr>
-//       </table>
-//     </div>
-//   );
-// }
-// export default Table;
-
 
 import styles from './Table.module.css';
 function Table({ list }) {
@@ -49,7 +17,7 @@ function Table({ list }) {
         <tbody>
           {list &&
             list.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.name}>
                 <td>{item.name}</td>
                 <td>{item.description}</td>
                 <td>{item.type}</td>
