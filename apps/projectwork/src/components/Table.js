@@ -33,6 +33,12 @@
 
 import styles from './Table.module.css';
 function Table({ list }) {
+console.log(list);
+const startDate = "2024-01-01"
+const endDate = "2024-06-01"
+// console.log(date);
+  const newEditList = list.filter((item) => item.date.iso > startDate && item.date.iso < endDate);
+  console.log(newEditList);
   return (
     <div>
       <table className={styles.table}>
@@ -47,8 +53,8 @@ function Table({ list }) {
           </tr>
         </thead>
         <tbody>
-          {list &&
-            list.map((item) => (
+          {newEditList &&
+            newEditList.map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>{item.description}</td>

@@ -9,13 +9,13 @@ function App() {
   const [holidayData, setHolidayData] = useState([]);
   const apiGet = async () => {
     try {
-      const response = await mockAPI.get(`/holidays?&api_key=e6bc2f9624d494ca421477e718736a0b6ec483b4&country=AI&year=2024`);
+      const response = await mockAPI.get(`/holidays?&api_key=e6bc2f9624d494ca421477e718736a0b6ec483b4&country=SG&year=2024`);
       console.log("response.data", response.data);
       setHolidayData(response.data.response.holidays);
       //console.log(response.data.items[0])
       //console.log(response.data.items[1])
-      console.log("holidayData", holidayData)
-      console.log("holidayData.name", holidayData[0])
+      // console.log("holidayData", holidayData)
+      // console.log("holidayData.name", holidayData[0])
       // console.log("weatherData.api_info", weatherData.api_info)
       // console.log("weatherData.items[0]", weatherData.items[0])
       // console.log("weatherData.items[0].forecasts", weatherData.items[0].forecasts[0])
