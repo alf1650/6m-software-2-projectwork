@@ -1,7 +1,18 @@
 .fav {
   position: relative;
   text-align: center;
-  padding: 100px;
+  padding: 50px;
   margin-top: 100px;
   background-color: rgb(249, 233, 240);
+}
+
+.back {
+  position: absolute;
+  top: 0.2%;
+  left: 80%;
+  cursor: pointer;
+}
+
+button {
+  margin: 10px;
 }

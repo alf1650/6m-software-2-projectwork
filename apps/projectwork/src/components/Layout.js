@@ -1,10 +1,17 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-function Layout() {
+function Layout({ isLoggedin, setIsloggedin, username, updateUsername, currency, updateCurrency }) {
   return (
     <>
-      <Navbar />
+      <Navbar
+        isLoggedin={isLoggedin}
+        setIsloggedin={setIsloggedin}
+        username={username}
+        updateUsername={updateUsername}
+        currency={currency}
+        updateCurrency={updateCurrency}
+      />
       <Outlet />
     </>
   );

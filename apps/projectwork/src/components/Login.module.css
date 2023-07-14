@@ -11,3 +11,13 @@
   height: 30px;
   cursor: pointer;
 }
+
+.button:hover:enabled {
+      background-color:#ceced2;
+      border: 1px solid rgb(109, 106, 106);
+      transition: 0.1s;
+  }
+
+.button:disabled {
+  cursor: not-allowed;
+}

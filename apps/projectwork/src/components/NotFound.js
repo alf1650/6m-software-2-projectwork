@@ -1,7 +1,7 @@
+import styles from "./NotFound.module.css";
+
 function NotFound() {
-  return (
-    <div>NotFound</div>
-  )
+  return <div className={styles.center}>Oops.. Page not found</div>;
 }
 
-export default NotFound
+export default NotFound;
