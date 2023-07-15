@@ -12,6 +12,7 @@ function Search({ username }) {
   const [isLoading, setIsLoading] = useState("false");
 
   const navigate = useNavigate();
+  const API_KEY = process.env.REACT_APP_API_KEY;
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -21,7 +22,7 @@ function Search({ username }) {
           "https://calendarific.com/api/v2/countries",
           {
             params: {
-              api_key: "bec8af6c95730291984e596b210fc460f4bbacab",
+              api_key: API_KEY,
             },
           }
         );
@@ -29,11 +30,10 @@ function Search({ username }) {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching countries:", error);
-        setIsLoading(false);
       }
     };
-
     fetchCountries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
@@ -65,7 +65,7 @@ function Search({ username }) {
             {isLoading ? "Loading..." : "Select a country"}
           </option>
           {countries.map((country, i) => (
-            <option key={i} value={country.country_code}>
+            <option key={i} value={country.country_name}>
               {country.country_name}
             </option>
           ))}

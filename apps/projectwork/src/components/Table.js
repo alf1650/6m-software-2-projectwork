@@ -1,5 +1,7 @@
 import styles from "./Table.module.css";
-function Table({ holidayData }) {
+
+function Table({ filteredData }) {
+
   return (
     <div>
       <table className={styles.table}>
@@ -12,8 +14,8 @@ function Table({ holidayData }) {
           </tr>
         </thead>
         <tbody>
-          {holidayData &&
-            holidayData.map((data, i) => (
+          {filteredData &&
+            filteredData.map((data, i) => (
               <tr key={i}>
                 <td>{data.name}</td>
                 <td>{data.description}</td>

@@ -22,6 +22,21 @@ function App() {
     setCurrency(value);
   };
 
+  const updateFavs = (newlist) => {
+    setFavs((prev) => [...prev, newlist]);
+  };
+
+  const updateFavNotes = (id, input) => {
+    setFavs(
+      favs.map((fav) => (fav.id === id ? { ...fav, notes: input } : fav))
+    );
+    console.log(input);
+  };
+
+  const deleteFav = (newlist) => {
+    setFavs(newlist);
+  };
+
   return (
     <>
       <BrowserRouter>
@@ -36,6 +51,7 @@ function App() {
                 updateUsername={updateUsername}
                 currency={currency}
                 updateCurrency={updateCurrency}
+                favs={favs}
               />
             }
           >
@@ -51,8 +67,20 @@ function App() {
               }
             />
             <Route path="search" element={<Search username={username} />} />
-            <Route path="results" element={<Results currency={currency} />} />
-            <Route path="favorites" element={<Favorites favs={favs} />} />
+            <Route
+              path="results"
+              element={<Results currency={currency} updateFavs={updateFavs} />}
+            />
+            <Route
+              path="favorites"
+              element={
+                <Favorites
+                  favs={favs}
+                  updateFavNotes={updateFavNotes}
+                  deleteFav={deleteFav}
+                />
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

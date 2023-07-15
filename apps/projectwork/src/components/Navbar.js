@@ -9,6 +9,7 @@ function Navbar({
   updateUsername,
   currency,
   updateCurrency,
+  favs
 }) {
   const logout = () => {
     setisLoggedin(false);
@@ -28,7 +29,7 @@ function Navbar({
           </div>
           <div>
             <NavLink className={styles.navlink} to="/favorites">
-              Favs
+              {`Favorites (${favs ? favs.length : 0})`}
             </NavLink>
             <NavLink className={styles.navlink} to="/" onClick={logout}>
               Logout
