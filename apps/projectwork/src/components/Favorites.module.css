@@ -1,0 +1,75 @@
+.fav {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.fav h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.fav form {
+  margin-bottom: 20px;
+}
+
+.fav label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.fav input[type="text"],
+.fav input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.fav button[type="submit"],
+.fav button[type="button"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.fav button[type="submit"]:hover,
+.fav button[type="button"]:hover {
+  background-color: #45a049;
+}
+
+.fav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fav li {
+  margin-bottom: 10px;
+}
+
+.fav li strong {
+  font-weight: bold;
+}
+
+.fav li button {
+  background-color: #f44336;
+  color: white;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.fav li button:hover {
+  background-color: #d32f2f;
+}
