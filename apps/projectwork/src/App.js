@@ -9,21 +9,78 @@ import NotFound from "./components/NotFound";
 import Favorites from "./components/Favorites";
 
 function App() {
-  const [username, setUsername] = useState("guest");
+  const [isLoggedin, setIsloggedin] = useState(false);
+  const [username, setUsername] = useState("");
+  const [currency, setCurrency] = useState("SGD");
+  const [favs, setFavs] = useState("");
 
   const updateUsername = (value) => {
     setUsername(value);
+  };
+
+  const updateCurrency = (value) => {
+    setCurrency(value);
+  };
+
+  const updateFavs = (newlist) => {
+    setFavs((prev) => [...prev, newlist]);
+  };
+
+  const updateFavNotes = (id, input) => {
+    setFavs(
+      favs.map((fav) => (fav.id === id ? { ...fav, notes: input } : fav))
+    );
+    console.log(input);
+  };
+
+  const deleteFav = (newlist) => {
+    setFavs(newlist);
   };
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Login updateUsername={updateUsername} />} />
+          <Route
+            path="/"
+            element={
+              <Layout
+                isLoggedin={isLoggedin}
+                setIsloggedin={setIsloggedin}
+                username={username}
+                updateUsername={updateUsername}
+                currency={currency}
+                updateCurrency={updateCurrency}
+                favs={favs}
+              />
+            }
+          >
+            <Route
+              index
+              element={
+                <Login
+                  setIsloggedin={setIsloggedin}
+                  updateUsername={updateUsername}
+                  currency={currency}
+                  updateCurrency={updateCurrency}
+                />
+              }
+            />
             <Route path="search" element={<Search username={username} />} />
-            <Route path="favorites" element={<Favorites/>} />
-            <Route path=":id" element={<Results />} />
+            <Route
+              path="results"
+              element={<Results currency={currency} updateFavs={updateFavs} />}
+            />
+            <Route
+              path="favorites"
+              element={
+                <Favorites
+                  favs={favs}
+                  updateFavNotes={updateFavNotes}
+                  deleteFav={deleteFav}
+                />
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

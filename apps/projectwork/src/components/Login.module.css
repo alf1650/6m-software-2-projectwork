@@ -1,8 +1,9 @@
 .login {
   position: relative;
+  min-height: 500px;
   text-align: center;
   padding: 100px;
-  margin-top: 100px;
+  margin-top: 75px;
   background-color: rgb(225, 244, 250);
 }
 
@@ -10,4 +11,18 @@
   width: 200px;
   height: 30px;
   cursor: pointer;
+}
+
+.button:hover:enabled {
+  background-color: #ceced2;
+  border: 1px solid rgb(109, 106, 106);
+  transition: 0.1s;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+p {
+  position: relative;
 }
