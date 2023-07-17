@@ -1,9 +1,56 @@
-.map {
+/* @import "~leaflet/dist/leaflet.css"; */
+
+/* Map.module.css */
+
+.MapContainer {
+    position: relative;
+    outline: none;
+    box-sizing: border-box;
     height: 400px;
-    background-color: rgb(185, 236, 235);
-    
+    margin-top: 250px;
+    width: auto;
 }
 
-h1 {
-    margin-top: 80px;
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+    touch-action: ;
 }
+
+.leaflet-container.leaflet-touch-drag {
+  -ms-touch-action: 
+}
+
+.leaflet-container.leaflet-touch-zoom {
+  -ms-touch-action: 
+}
+
+.leaflet-container {
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.leaflet-container {
+  background: #ddd;
+  outline-offset: 1px;
+}
+
+.leaflet-grab {
+  cursor: grab;
+}
+
+.leaflet-container {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.leaflet-container {
+  overflow: hidden;
+}
+
+
+
+
+/* .leaflet-container {
+  height: 300px;
+  margin-top: 200px;
+  width: 590px;
+} */

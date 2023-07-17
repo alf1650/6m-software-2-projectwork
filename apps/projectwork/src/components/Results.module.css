@@ -1,11 +1,16 @@
+
 .results {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
   min-height: 500px;
   text-align: center;
   padding: 1px 50px 50px 50px;
-  margin-top: 75px;
+  margin-top: auto;
   background-color: rgb(247, 245, 237);
 }
+
 
 .back {
   position: absolute;
@@ -40,4 +45,13 @@ button {
 
 input:hover {
   cursor: text;
+}
+
+.MapContainer {
+  position: relative;
+  outline: none;
+  box-sizing: border-box;
+  height: 400px;
+  margin-top: 250px;
+  width: auto;
 }

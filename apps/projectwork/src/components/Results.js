@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import mockAPI from "../api/mockapi";
 import Table from "./Table";
 import Map from "./Map";
 import styles from "./Results.module.css";
+import axios from "axios";
 
 const iso3166 = require("iso-3166-1");
 
@@ -13,6 +14,7 @@ function Results({ currency, updateFavs }) {
   const [isLoading, setIsLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Add to Favorites");
   const navigate = useNavigate();
+  const [showMap, setshowMap] = useState(true);
 
   const [searchParams] = useSearchParams();
   const [searchedCountry] = useState(searchParams.get("country"));
@@ -20,6 +22,7 @@ function Results({ currency, updateFavs }) {
   const [startDate, setStartDate] = useState(`${searchedYear}-01-01`);
   const [endDate, setEndDate] = useState(`${searchedYear}-12-31`);
   const countryData = iso3166.whereAlpha2(searchedCountry);
+  const [position, setPosition] = useState({ lat: 0, lon: 0 });
 
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -27,15 +30,22 @@ function Results({ currency, updateFavs }) {
     (data) => data.date.iso > startDate && data.date.iso < endDate
   );
 
+  
+
   useEffect(() => {
     const apiGet = async () => {
       setIsLoading(true);
       try {
-        const response = await mockAPI.get(
+        const response1 = await mockAPI.get(
           `/holidays?&api_key=${API_KEY}&country=${searchedCountry}&year=${searchedYear}`
         );
-        setHolidayData(response.data.response.holidays);
+        setHolidayData(response1.data.response.holidays);
         setIsLoading(false);
+        const response2 = await axios.get(`https://geocode.maps.co/search?country=${searchedCountry}`);
+        console.log("response2.data",response2.data[0]);
+        // setPosition({lat: response2.data[0].lat, lon: response2.data[0].lon});
+        setPosition(response2.data[0]);
+        console.log("position",position); 
       } catch (error) {
         console.log(error.message);
       }
@@ -43,6 +53,10 @@ function Results({ currency, updateFavs }) {
     apiGet();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchedCountry, searchedYear]);
+
+  // useEffect(() => {
+  //   console.log("position1", position1);
+  // }, [position1]);
 
   const handleAdd = () => {
     const newFav = {
@@ -66,6 +80,8 @@ function Results({ currency, updateFavs }) {
   const handleEnd = (e) => {
     setEndDate(e.target.value);
   };
+
+  //const position = [1.3521, 103.8198];
 
   return (
     <div className={styles.results}>
@@ -103,7 +119,9 @@ function Results({ currency, updateFavs }) {
         {isLoading ? <progress /> : <Table filteredData={filteredData} />}
       </div>
       {/*API FOR MAP*/}
-      <Map />
+      <div className={styles.MapContainer}>
+      {showMap && <Map position={{lat: position.lat, lon: position.lon}} />}
+      </div>
       {/*API FOR MAP*/}
     </div>
   );
