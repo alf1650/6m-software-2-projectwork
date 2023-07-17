@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import mockAPI from "../api/mockapi";
+import converter from "../api/converter";
 import Table from "./Table";
 import Map from "./Map";
 import styles from "./Results.module.css";
@@ -10,18 +11,24 @@ const iso3166 = require("iso-3166-1");
 
 function Results({ currency, updateFavs }) {
   const [holidayData, setHolidayData] = useState([]);
+  const [convertedAmount, setConvertedAmount] = useState("1");
+  const [nativeCurrency, setNativeCurrency] = useState("");
+  const [nativeCurrencyName, setNativeCurrencyName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCurrencyLoading, setIsCurrencyLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Add to Favorites");
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const [searchedCountry] = useState(searchParams.get("country"));
+  const [searchedCountryCode] = useState(searchParams.get("country"));
   const [searchedYear] = useState(searchParams.get("year"));
   const [startDate, setStartDate] = useState(`${searchedYear}-01-01`);
   const [endDate, setEndDate] = useState(`${searchedYear}-12-31`);
-  const countryData = iso3166.whereAlpha2(searchedCountry);
+  const countryData = iso3166.whereAlpha2(searchedCountryCode);
 
-  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" ");
+  const COUNTRY_API_KEY = API_KEYS_ARRAY[0];
+  const CONVERTER_API_KEY = API_KEYS_ARRAY[1];
 
   const filteredData = holidayData.filter(
     (data) => data.date.iso > startDate && data.date.iso < endDate
@@ -32,7 +39,7 @@ function Results({ currency, updateFavs }) {
       setIsLoading(true);
       try {
         const response = await mockAPI.get(
-          `/holidays?&api_key=${API_KEY}&country=${searchedCountry}&year=${searchedYear}`
+          `/holidays?&api_key=${COUNTRY_API_KEY}&country=${searchedCountryCode}&year=${searchedYear}`
         );
         setHolidayData(response.data.response.holidays);
         setIsLoading(false);
@@ -42,7 +49,52 @@ function Results({ currency, updateFavs }) {
     };
     apiGet();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchedCountry, searchedYear]);
+  }, [searchedCountryCode, searchedYear]);
+
+  useEffect(() => {
+    const fetchNativeCurrency = async () => {
+      try {
+        const response = await converter.get("/country", {
+          headers: { "X-Api-Key": CONVERTER_API_KEY },
+          params: {
+            name: `${countryData.country}`,
+          },
+        });
+        return response.data[0].currency;
+      } catch (error) {
+        console.error("Error fetching currency:", error);
+      }
+    };
+
+    const fetchConvertedAmount = async (nativeC) => {
+      try {
+        const response = await converter.get("/convertcurrency", {
+          headers: { "X-Api-Key": CONVERTER_API_KEY },
+          params: {
+            want: `${nativeC}`,
+            have: `${currency}`,
+            amount: 1,
+          },
+        });
+        return response.data.new_amount;
+      } catch (error) {
+        console.error("Error fetching currency:", error);
+      }
+    };
+
+    const fetchCurrencyConversion = async () => {
+      setIsCurrencyLoading(true);
+      const native = await fetchNativeCurrency();
+      const convert = await fetchConvertedAmount(native.code);
+      setNativeCurrency(native.code);
+      setNativeCurrencyName(native.name);
+      setConvertedAmount(convert);
+      setIsCurrencyLoading(false);
+    };
+
+    fetchCurrencyConversion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency]);
 
   const handleAdd = () => {
     const newFav = {
@@ -96,15 +148,17 @@ function Results({ currency, updateFavs }) {
         onChange={handleEnd}
       />
       <br />
-      {/*API FOR $ CONVERTER*/}
-      <h4>{`1 ${currency} = 1${searchedCountry}`}</h4>
-      {/*API FOR $ CONVERTER*/}
+      <h4>
+        {isCurrencyLoading ? (
+          <progress />
+        ) : (
+          `1 ${currency} = $ ${convertedAmount} ${nativeCurrency} (${nativeCurrencyName.toUpperCase()})`
+        )}
+      </h4>
       <div>
         {isLoading ? <progress /> : <Table filteredData={filteredData} />}
       </div>
-      {/*API FOR MAP*/}
-      <Map />
-      {/*API FOR MAP*/}
+      <Map searchedCountry={countryData.country} />
     </div>
   );
 }

@@ -12,7 +12,8 @@ function Search({ username }) {
   const [isLoading, setIsLoading] = useState("false");
 
   const navigate = useNavigate();
-  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" ");
+  const COUNTRY_API_KEY = API_KEYS_ARRAY[0];
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -22,7 +23,7 @@ function Search({ username }) {
           "https://calendarific.com/api/v2/countries",
           {
             params: {
-              api_key: API_KEY,
+              api_key: COUNTRY_API_KEY,
             },
           }
         );

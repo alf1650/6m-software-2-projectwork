@@ -1,3 +1,12 @@
 .App {
   text-align: center;
 }
+
+.leaflet-container {
+  width: 93vw;
+  height: 70vh;
+}
+
+progress { 
+  accent-color: rgb(255, 255, 255);
+}

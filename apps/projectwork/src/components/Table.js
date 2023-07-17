@@ -1,7 +1,6 @@
 import styles from "./Table.module.css";
 
 function Table({ filteredData }) {
-
   return (
     <div>
       <table className={styles.table}>
