@@ -1,6 +1,7 @@
+import styles from "./Table.module.css";
 
-import styles from './Table.module.css';
-function Table({ list }) {
+function Table({ filteredData }) {
+
   return (
     <div>
       <table className={styles.table}>
@@ -9,20 +10,17 @@ function Table({ list }) {
             <th>Name</th>
             <th>Description</th>
             <th>Type</th>
-            <th>Country</th>
-            <th>Date</th>
-
+            <th>Date/Time</th>
           </tr>
         </thead>
         <tbody>
-          {list &&
-            list.map((item) => (
-              <tr key={item.name}>
-                <td>{item.name}</td>
-                <td>{item.description}</td>
-                <td>{item.type}</td>
-                <td>{item.country.name}</td>
-                <td>{item.date.iso}</td>
+          {filteredData &&
+            filteredData.map((data, i) => (
+              <tr key={i}>
+                <td>{data.name}</td>
+                <td>{data.description}</td>
+                <td>{data.type}</td>
+                <td>{data.date.iso}</td>
               </tr>
             ))}
         </tbody>

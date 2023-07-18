@@ -1,46 +1,45 @@
 import styles from "./Login.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CurrencySelector from "./CurrencySelector";
 
-function Login({ updateUsername }) {
-  const [name, setName] = useState("");
-  const [selectedValue, setSelectedValue] = useState("SGD");
+function Login({ setIsloggedin, updateUsername, currency, updateCurrency }) {
+  const [input, setInput] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleSelect = (e) => {
-    setSelectedValue(e.target.value);
-  };
-
-  const handleClick = (name) => {
-    // updateUsername(name);
+  const handleClick = () => {
+    updateUsername(input);
     navigate("/search");
+    setIsloggedin(true);
   };
 
   return (
     <div className={styles.login}>
+      <div className={styles.content}>
       <h1>Welcome to TravelBud!</h1>
+      <br />
       <p>Please enter your name to start using app</p>
       <br />
       <label>Name: </label>
-      <input placeholder="e.g. John" value={name} onChange={handleChange} />
-      <br />
+      <input
+        type="text"
+        placeholder="e.g. John"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
       <br />
       <label>Select your currency: </label>
-      <select value={selectedValue} onChange={handleSelect}>
-        <option value="SG">SGD</option>
-        <option value="USD">USD</option>
-        <option value="GBP">GBP</option>
-      </select>
+      <CurrencySelector currency={currency} updateCurrency={updateCurrency} />
       <br />
       <br />
-      <br />
-      <button className={styles.button} onClick={handleClick}>
-        Login
+      <button
+        className={styles.button}
+        disabled={input ? false : true}
+        onClick={handleClick}
+      >
+        Start Your Journey
       </button>
+    </div>
     </div>
   );
 }
