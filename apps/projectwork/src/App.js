@@ -1,110 +1,93 @@
-import './App.css';
-// App.js
-import { useEffect, useState } from 'react';
-import mockAPI from './api/mockapi';
-import Table from './components/Table';
-// import AddForm from './components/AddForm';
+import "./App.css";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Login from "./components/Login";
+import Search from "./components/Search";
+import Results from "./components/Results";
+import NotFound from "./components/NotFound";
+import Favorites from "./components/Favorites";
+import Footer from "./components/Footer";
 
 function App() {
-  const [holidayData, setHolidayData] = useState([]);
-  const apiGet = async () => {
-    try {
-      const response = await mockAPI.get(`/holidays?&api_key=e6bc2f9624d494ca421477e718736a0b6ec483b4&country=AI&year=2024`);
-      console.log("response.data", response.data);
-      setHolidayData(response.data.response.holidays);
-      //console.log(response.data.items[0])
-      //console.log(response.data.items[1])
-      console.log("holidayData", holidayData)
-      console.log("holidayData.name", holidayData[0])
-      // console.log("weatherData.api_info", weatherData.api_info)
-      // console.log("weatherData.items[0]", weatherData.items[0])
-      // console.log("weatherData.items[0].forecasts", weatherData.items[0].forecasts[0])
-      // console.log("weatherData.items[0].forecasts[0].date", weatherData.items[0].forecasts[0].date)
-      // console.log("weatherData.items[0].forecasts[0].date", weatherData.items[0].forecasts[0].forecast)
+  const [isLoggedin, setIsloggedin] = useState(false);
+  const [username, setUsername] = useState("");
+  const [currency, setCurrency] = useState("SGD");
+  const [favs, setFavs] = useState("");
 
-      // console.log("weatherData.date", weatherData[0].date)
-      // console.log("weatherData.forecast", weatherData[0].forecast)
-      //console.log("weatherData.items", weatherData.forecasts)
-       } catch (error) {
-      console.log(error.message);
-    }
-  }
-  //https://api.data.gov.sg/v1/environment/4-day-weather-forecast?date=2023-07-04
+  const updateUsername = (value) => {
+    setUsername(value);
+  };
 
-  // const apiGetId = async (id) => {
-  //   try {
-  //     const response = await mockAPI(`/product/${id}`);
-  //       console.log(response.data);    
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
-  
-  // const apiPost = async (newProduct) => {
-  //   try {
-  //     const response = await mockAPI.post(`/product`, newProduct)
-  //     console.log(response.data);
-  //     apiGet();
-  //   } catch(error) {
-  //     console.log(error.message);
-  //   };
-  // }
+  const updateCurrency = (value) => {
+    setCurrency(value);
+  };
 
-  // const apiPut = async (id) => {
-  //   try {
-  //     const response = await mockAPI.put(`/product/${id}`, {
-  //       name: '*** NEW PRODUCT ***',
-  //       quantity: 8,
-  //       price: '88.88',
-  //     });
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
-  
-  // const apiDelete = async (id) => {
-  //   try {
-  //     const response = await mockAPI.delete(`/product/${id}`);
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);    
-  //   }
-  // }
+  const updateFavs = (newlist) => {
+    setFavs((prev) => [...prev, newlist]);
+  };
 
+  const updateFavNotes = (id, input) => {
+    setFavs(
+      favs.map((fav) => (fav.id === id ? { ...fav, notes: input } : fav))
+    );
+    console.log(input);
+  };
 
-  // const objectAdd = {
-  //   name: ' Product One added by Alfred',
-  //   quantity: 10,
-  //   price: 15.00
-  // }
-
-  useEffect(() => {
-    apiGet();
-  }, []);
-
+  const deleteFav = (newlist) => {
+    setFavs(newlist);
+  };
 
   return (
-    
-
-    <div className="App">
-      <h1>Holiday Data</h1>
-      {/* <AddForm handlerAddItem={apiPost} />  */}
-      {/* <button onClick={() => apiPost(50)}>Post Products</button> */}
-      {/* <button onClick={() => apiGet(50)}>Show Products</button> */}
-      <button onClick={apiGet}>Load Holiday Data</button>
-      {/* <button onClick={() => apiPut(50)}>Update Products</button> */}
-      <Table list={holidayData} />
-
-      {/* {weatherData.items[0].forecasts.map((forecast, index) => (
-              <tr key={index}>
-                <td>{forecast.date}</td>
-                <td>{forecast.temperature}</td>
-                <td>{forecast.relative_humidity}</td>
-              </tr>
-            ))} */}
-
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Layout
+                isLoggedin={isLoggedin}
+                setIsloggedin={setIsloggedin}
+                username={username}
+                updateUsername={updateUsername}
+                currency={currency}
+                updateCurrency={updateCurrency}
+                favs={favs}
+              />
+            }
+          >
+            <Route
+              index
+              element={
+                <Login
+                  setIsloggedin={setIsloggedin}
+                  updateUsername={updateUsername}
+                  currency={currency}
+                  updateCurrency={updateCurrency}
+                />
+              }
+            />
+            <Route path="search" element={<Search username={username} />} />
+            <Route
+              path="results"
+              element={<Results currency={currency} updateFavs={updateFavs} />}
+            />
+            <Route
+              path="favorites"
+              element={
+                <Favorites
+                  favs={favs}
+                  updateFavNotes={updateFavNotes}
+                  deleteFav={deleteFav}
+                />
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </>
   );
 }
 export default App;
