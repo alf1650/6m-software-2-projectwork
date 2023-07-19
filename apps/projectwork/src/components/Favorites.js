@@ -1,113 +1,80 @@
-import React, { useState } from "react";
 import styles from "./Favorites.module.css";
+import { useNavigate } from "react-router-dom";
 
-const Favorites = ({ favorites, handleUpdate, handleCancel }) => {
-  const [countryName, setCountryName] = useState("");
-  const [date, setDate] = useState("");
-  const [notes, setNotes] = useState("");
-  const [submittedFavorites, setSubmittedFavorites] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
+function Favorites({ favs, updateFavNotes, deleteFav }) {
+  const sampleTexts = [
+    "e.g. I want to go there with..",
+    "e.g. Take leave from..",
+    "e.g. Buying tickets..",
+    "e.g. Check schedule..",
+    "e.g. Save up..",
+    "e.g. To arrange..",
+    "e.g. A good option..",
+    "e.g. To consider..",
+  ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const getRandomInt = () => {
+    return Math.floor(Math.random() * sampleTexts.length);
+  };
+  const navigate = useNavigate();
 
-    const updatedFavorites = {
-      id: editingIndex !== null ? editingIndex : null,
-      countryName: countryName,
-      date: date,
-      notes: notes,
-    };
-
-    if (editingIndex !== null) {
-      // Update an existing favorite
-      setSubmittedFavorites((prevFavorites) =>
-        prevFavorites.map((favorite, index) =>
-          index === editingIndex ? updatedFavorites : favorite
-        )
-      );
-      setEditingIndex(null);
-    } else {
-      // Add a new favorite
-      setSubmittedFavorites((prevFavorites) => [...prevFavorites, updatedFavorites]);
-    }
-
-    // Clear the input fields after submission
-    setCountryName("");
-    setDate("");
-    setNotes("");
+  const handleChange = (e, id) => {
+    const input = e.target.value;
+    updateFavNotes(id, input);
   };
 
-  const handleDelete = (index) => {
-    setSubmittedFavorites((prevFavorites) =>
-      prevFavorites.filter((_, i) => i !== index)
-    );
-  };
-
-  const handleEdit = (index) => {
-    const favorite = submittedFavorites[index];
-    setCountryName(favorite.countryName);
-    setDate(favorite.date);
-    setNotes(favorite.notes);
-    setEditingIndex(index);
+  const handleDelete = (id) => {
+    const newFavs = favs.filter((fav) => fav.id !== id);
+    deleteFav(newFavs);
   };
 
   return (
     <div className={styles.fav}>
-      <h2>Favorites</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Country Name:</label>
-        <input
-          type="text"
-          placeholder="Country"
-          value={countryName}
-          onChange={(e) => setCountryName(e.target.value)}
-        />
-        <br />
-        <label>Date:</label>
-        <input
-          type="number"
-          placeholder="Date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <br />
-        <label>Notes:</label>
-        <input
-          type="text"
-          placeholder="Things to Note"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
-        <br />
-        <button type="submit">
-          {editingIndex !== null ? "Update" : "Submit"}
-        </button>
-        <button type="button" onClick={handleCancel}>
-          Cancel
-        </button>
-      </form>
-
-      {/* Display the submitted favorites */}
+      <button className={styles.back} onClick={() => navigate(-1)}>
+        {`« Back to Results`}
+      </button>
+      <h1>Favorites</h1>
       <div>
-        <h3>Current Favorites:</h3>
-        <ul>
-          {submittedFavorites.length > 0 ? (
-            submittedFavorites.map((favorite, index) => (
-              <li key={index}>
-                <strong>Country:</strong> {favorite.countryName},{" "}
-                <strong>Date:</strong> {favorite.date}, <strong>Notes:</strong>{" "}
-                {favorite.notes}
-                <button onClick={() => handleEdit(index)}>Edit</button>
-                <button onClick={() => handleDelete(index)}>Delete</button>
-              </li>
-            ))
-          ) : (
-            <p>No favorites yet..</p>
-          )}
-        </ul>
+        {favs.length !== 0 ? (
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Country</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Personal Notes</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {favs.map((fav, i) => (
+                <tr key={i}>
+                  <td>{fav.country}</td>
+                  <td>{fav.start}</td>
+                  <td>{fav.end}</td>
+                  <td>
+                    <textarea
+                      value={fav.notes}
+                      rows="3"
+                      cols="50"
+                      maxLength="150"
+                      placeholder={sampleTexts[getRandomInt()]}
+                      onChange={(e) => handleChange(e, fav.id)}
+                    ></textarea>
+                  </td>
+                  <td>
+                    <button onClick={() => handleDelete(fav.id)}>x</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No favorites yet..</p>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default Favorites;
