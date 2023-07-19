@@ -1,70 +1,126 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import mockAPI from "../api/mockapi";
+import Table from "./Table";
+import Map from "./Map";
+import styles from "./Results.module.css";
 
-const Results = ({ country, year }) => {
-  const [holidays, setHolidays] = useState([]);
-  const [loading, setLoading] = useState(false);
+const iso3166 = require("iso-3166-1");
+
+function Results({ currency, updateFavs }) {
+  const [holidayData, setHolidayData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Add to Favorites");
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const [searchedCountry] = useState(searchParams.get("country"));
+  const [searchedYear] = useState(searchParams.get("year"));
+  const [startDate, setStartDate] = useState(`${searchedYear}-01-01`);
+  const [endDate, setEndDate] = useState(`${searchedYear}-12-31`);
+  const countryData = iso3166.whereAlpha2(searchedCountry);
+
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const EXCHANGE_API_BASE_URL = "https://v6.exchangerate-api.com/v6/ed1584ef93e1097b9b0c32f3/latest/USD";
+
+  const [exchangeRate, setExchangeRate] = useState(null);
+
+  const filteredData = holidayData.filter(
+    (data) => data.date.iso > startDate && data.date.iso < endDate
+  );
 
   useEffect(() => {
-    const fetchHolidays = async () => {
-      setLoading(true);
+    const apiGet = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.get('https://calendarific.com/api/v2/holidays', {
-          params: {
-            api_key: 'bec8af6c95730291984e596b210fc460f4bbacab',
-            country: country,
-            year: year,
-          },
-        });
-        console.log('API Response:', response.data);
-        setHolidays(response.data.response.holidays || []);
+        const response = await mockAPI.get(
+          `/holidays?&api_key=${API_KEY}&country=${searchedCountry}&year=${searchedYear}`
+        );
+        setHolidayData(response.data.response.holidays);
+        setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching holidays:', error);
-        setHolidays([]); 
+        console.log(error.message);
       }
-      setLoading(false);
     };
 
-    if (country && year) {
-      fetchHolidays();
-    }
-  }, [country, year]);
-
-  const handleSaveFavorite = (holiday) => {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const newFavorite = {
-      name: holiday.name,
-      date: holiday.date.iso,
+    const getExchangeRate = async () => {
+      try {
+        const response = await fetch(EXCHANGE_API_BASE_URL);
+        const data = await response.json();
+        setExchangeRate(data.conversion_rates[searchedCountry]);
+      } catch (error) {
+        console.log(error.message);
+      }
     };
-    const updatedFavorites = [...favorites, newFavorite];
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    console.log('Favorite saved:', newFavorite);
+
+    apiGet();
+    getExchangeRate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchedCountry, searchedYear]);
+
+  const handleAdd = () => {
+    const newFav = {
+      id: uuidv4(),
+      country: countryData.country,
+      start: startDate,
+      end: endDate,
+      notes: "",
+    };
+    updateFavs(newFav);
+    setButtonText("Added!");
+    setTimeout(() => {
+      setButtonText("Add to Favorites");
+    }, 500);
+  };
+
+  const handleStart = (e) => {
+    setStartDate(e.target.value);
+  };
+
+  const handleEnd = (e) => {
+    setEndDate(e.target.value);
   };
 
   return (
-    <div>
-      <h2>Results</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <h3>Holidays</h3>
-          {Array.isArray(holidays) && holidays.length === 0 ? (
-            <p>No holidays found.</p>
-          ) : (
-            <ul>
-              {holidays.map((holiday) => (
-                <li key={holiday.name}>
-                  {holiday.date.iso} - {holiday.name}
-                  <button onClick={() => handleSaveFavorite(holiday)}>Save</button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </>
-      )}
+    <div className={styles.results}>
+      <button className={styles.back} onClick={() => navigate("/search")}>
+        {`« Back to Search`}
+      </button>
+      <p className={styles.title}>
+        {`Travel to ${countryData.country} in ${searchedYear}`} </p>
+        <button className={styles.add} onClick={handleAdd}>
+          {buttonText}
+        </button>
+      <h1>{`${countryData.country} Holidays in ${searchedYear}`}</h1>
+      <label>From: </label>
+      <input
+        type="date"
+        value={startDate}
+        min={`${searchedYear}-01-01`}
+        max={`${searchedYear}-12-30`}
+        onChange={handleStart}
+      />
+      <br />
+      <label> To: </label>
+      <input
+        type="date"
+        value={endDate}
+        min={`${searchedYear}-01-02`}
+        max={`${searchedYear}-12-31`}
+        onChange={handleEnd}
+      />
+      <br />
+      {/*API FOR $ CONVERTER*/}
+      <h4>{`1 ${currency} = ${exchangeRate ? exchangeRate.toFixed(2) : "..."} ${searchedCountry}`}</h4>
+      {/*API FOR $ CONVERTER*/}
+      <div>
+        {isLoading ? <progress /> : <Table filteredData={filteredData} />}
+      </div>
+      {/*API FOR MAP*/}
+      <Map />
+      {/*API FOR MAP*/}
     </div>
   );
-};
-
+}
 export default Results;
