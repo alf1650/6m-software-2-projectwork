@@ -84,6 +84,7 @@ const apiGet = async () => {
         onChange={(e) => setEmail(e.target.value)}
         type="text"
         placeholder="Email"
+        required
       />
       <br></br>
       <input
@@ -91,6 +92,7 @@ const apiGet = async () => {
         onChange={(e) => setPassword(e.target.value)}
         type="password"
         placeholder="Password"
+        required
       />
       <br></br>
       <small>{error}</small>

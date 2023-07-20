@@ -8,12 +8,14 @@ import TableUser from '../components/TableUser';
 import TableUserFav from '../components/TableUserFav';
 import AddFav from '../components/AddFav';
 import Registration from '../components/Registration';
+import { useNavigate} from 'react-router-dom';
 
 function Main() {
 
   const [users, setUsers] = useState([]);
   const [usersFav, setUsersFav] = useState([]);
   const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
 
   
   const apiGet = async () => {
@@ -61,14 +63,30 @@ function Main() {
 
   useEffect(() => {
     apiGet();
-const setNewUserInfo = JSON.parse(localStorage.getItem('user-info'));
-const setNewUserId = setNewUserInfo.map(item => item.userId);
-console.log(setNewUserId);
-setUserId(setNewUserId);
+    const setNewUserInfo = JSON.parse(localStorage.getItem('user-info'));
+   
 
+    if (setNewUserInfo !== null) {
+        // setLoggedIn(true);
+        navigate("/Main")
+        const setNewUserId = setNewUserInfo.map(item => item.userId);
+        // console.log(setNewUserId);
+        setUserId(setNewUserId);
+      } else {
+        // setLoggedIn(false);
+        navigate("/")
+      }
 
   }, []);
 
+  const handlerLogout = (e) => {
+    e.preventDefault();
+    setUserId("");
+    setUsers([]);
+    setUsersFav([]);
+    localStorage.removeItem('user-info');
+    navigate("/");
+  }
 
   return (
     
@@ -77,6 +95,7 @@ setUserId(setNewUserId);
       <h1>Holiday Data</h1>
       {/* <button onClick={apiGet}>Load Holiday Data</button> */}
       {/* <Table list={holidayData} /> */}
+      <button onClick= {handlerLogout}>Log out</button>
       <Registration handlerAddUser={apiPost} list={users} />
       <button onClick= {apiGet}>Load Users</button>
       <TableUser list={users} />
