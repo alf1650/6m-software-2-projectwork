@@ -1,33 +1,32 @@
 import "./App.css";
-import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Login from "./components/Login";
-import Search from "./components/Search";
-import Results from "./components/Results";
-import NotFound from "./components/NotFound";
-import Favorites from "./components/Favorites";
+import { UserStateProvider } from "./store/userStateContext";
+import Layout from "./pages/Layout";
+import Login from "./pages/Login";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
+import Search from "./pages/Search";
+import Results from "./pages/Results";
+import NotFound from "./pages/NotFound";
+import Favorites from "./pages/Favorites";
 
 function App() {
-  const [username, setUsername] = useState("guest");
-
-  const updateUsername = (value) => {
-    setUsername(value);
-  };
-
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Login updateUsername={updateUsername} />} />
-            <Route path="search" element={<Search username={username} />} />
-            <Route path="favorites" element={<Favorites/>} />
-            <Route path=":id" element={<Results />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <UserStateProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Login />} /> {/*Login is the default view for Home*/}
+              <Route element={<ProtectedRoutes />}> {/*Protected routes within, redirects to Home if not logged in*/}
+                <Route path="search" element={<Search />} />
+                <Route path="results" element={<Results />} />
+                <Route path="favorites" element={<Favorites />} />
+                <Route path="*" element={<NotFound />} /> 
+              </Route>{/*Protected routes within, redirects to Home if not logged in*/}
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </UserStateProvider>
     </>
   );
 }

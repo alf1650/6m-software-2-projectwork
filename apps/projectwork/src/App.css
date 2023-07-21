@@ -1,7 +1,13 @@
 .App {
   text-align: center;
 }
-input {
-  padding: 6px;
-  margin: 0 3px;
+
+.leaflet-container {
+  display: block;
+  width: 93vw;
+  height: 70vh;
+}
+
+progress { 
+  accent-color: rgb(255, 255, 255);
 }
