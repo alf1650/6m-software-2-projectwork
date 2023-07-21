@@ -17,12 +17,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Login />} /> {/*Login is the default view for Home*/}
-              <Route element={<ProtectedRoutes />}> {/*Protected routes within, redirects to Home if not logged in*/}
+              <Route element={<ProtectedRoutes />}> {/*Protected routes, redirects to Home if not logged in*/}
                 <Route path="search" element={<Search />} />
                 <Route path="results" element={<Results />} />
                 <Route path="favorites" element={<Favorites />} />
                 <Route path="*" element={<NotFound />} /> 
-              </Route>{/*Protected routes within, redirects to Home if not logged in*/}
+              </Route>{/*Protected routes, redirects to Home if not logged in*/}
             </Route>
           </Routes>
         </BrowserRouter>

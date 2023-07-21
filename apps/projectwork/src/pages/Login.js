@@ -17,7 +17,7 @@ function Login() {
 
   return (
     <div className={styles.login}>
-      <h1>Welcome to TravelBud!</h1>
+      <h1>Welcome to TravelBuddy!</h1>
       <p>Please enter your name to start using app</p>
       <br />
       <form onSubmit={handleSubmit}>
