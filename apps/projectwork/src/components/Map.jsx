@@ -48,15 +48,17 @@ function Map() {
       {isLoading ? (
         <progress />
       ) : (
-        <MapContainer center={[lat, lon]} zoom={5} scrollWheelZoom={false}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Marker position={[lat, lon]} icon={customIcon}>
-            <Popup>{selectedCountry.name}</Popup>
-          </Marker>
-        </MapContainer>
+        <div className={styles.map}>
+          <MapContainer center={[lat, lon]} zoom={5} scrollWheelZoom={false}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={[lat, lon]} icon={customIcon}>
+              <Popup>{selectedCountry.name}</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
       )}
     </div>
   );

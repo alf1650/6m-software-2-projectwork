@@ -1,7 +1,6 @@
 .center {
-  position: relative;
   text-align: center;
-  padding: 100px;
   margin-top: 100px;
-  background-color: rgb(204, 206, 207);
+  font-size: 24px;
+  color: #333;
 }

@@ -29,7 +29,7 @@ function Favorites() {
   return (
     <div className={styles.fav}>
       <button className={styles.back} onClick={() => navigate(-1)}>
-        {`« Back to previous page`}
+        {`« Back `}
       </button>
       <h1>Favorites</h1>
       <div>

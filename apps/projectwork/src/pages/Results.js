@@ -102,21 +102,23 @@ function Results() {
           {buttonText}
         </button>
       </p>
-      <h1>{`${selectedCountry.name} Holidays in ${selectedYear}`}</h1>
-      <label>From: </label>
-      <input
-        type="date"
-        value={startDate}
-        onKeyDown={(e) => e.preventDefault()}
-        onChange={(e) => setStartDate(e.target.value)}
-      />
-      <label> To: </label>
-      <input
-        type="date"
-        value={endDate}
-        onKeyDown={(e) => e.preventDefault()}
-        onChange={(e) => setEndDate(e.target.value)}
-      />
+      <div>
+        <h1>{`${selectedCountry.name} Holidays in ${selectedYear}`}</h1>
+        <label>From: </label>
+        <input
+          type="date"
+          value={startDate}
+          onKeyDown={(e) => e.preventDefault()}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <label> To: </label>
+        <input
+          type="date"
+          value={endDate}
+          onKeyDown={(e) => e.preventDefault()}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+      </div>
       <br />
       <CurrencyConverter />
       <div>

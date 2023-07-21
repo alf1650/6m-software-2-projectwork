@@ -1,55 +1,86 @@
 .fav {
-  position: relative;
-  min-height: 500px;
-  text-align: center;
-  padding: 50px;
-  margin-top: 75px;
-  background-color: rgb(249, 233, 240);
+  background-image: url(/public/favbg.png);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-repeat: 'no-repeat';
+  background-size: cover;
+  
 }
 
-.back {
+.fav h1 {
+  font-size: 50px;
+  font-family: "Helvetica Neue";
+  color: #000000;
+  margin-top: 100px;
+}
+
+.fav .back {
   position: absolute;
-  height: 30px;
-  top: 0.2%;
-  left: 5%;
+  top: 18%;
+  left: 3%;
+  background-color: rgb(36, 102, 114);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
-.table {
+.fav .back:hover {
+  background-color: #5fa1a7;
+}
+
+.fav table {
+  width: 100%;
   border-collapse: collapse;
-  margin: 25px auto;
-  font-size: 0.9em;
-  font-family: sans-serif;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
-.table thead tr {
-  background-color: rgb(212, 105, 152);
-  color: #ffffff;
-  text-align: left;
-}
-.table th,
-.table td {
-  text-align: left;
-  padding: 12px 15px;
-}
-.table th:nth-of-type(1),
-.table td:nth-of-type(1) {
-  text-align: left;
 }
 
-.table tbody tr {
-  border-bottom: 1px solid #dddddd;
+.fav th,
+.fav td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  font-family: "Helvetica Neue";
 }
 
-.table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+.fav th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #181515;
+  font-family: "Helvetica Neue";
+
 }
 
-.table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+.fav textarea {
+  width: 100%;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+  margin-bottom: 1px;
 }
 
-button {
-  margin: 10px;
+.fav button {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 8px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+}
+
+.fav button:hover {
+  background-color: #d32f2f;
+}
+
+.fav p {
+  text-align: center;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  font-family: "Helvetica Neue";
 }
