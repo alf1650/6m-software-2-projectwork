@@ -11,12 +11,13 @@ function Search() {
     updateCountriesList,
     selectedCountry,
     updateCountry,
+    selectedYear,
+    updateYear,
   } = useUserState();
   const [isLoading, setIsLoading] = useState("false");
-  const [year, setYear] = useState("2023");
   const navigate = useNavigate();
 
-  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" ");
+  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" "); //.env contains string with 2 keys, .split to access
   const COUNTRY_API_KEY = API_KEYS_ARRAY[0];
 
   useEffect(() => {
@@ -51,7 +52,7 @@ function Search() {
       pathname: "/results",
       search: `?${createSearchParams({
         country: selectedCountry.code,
-        year: year,
+        year: selectedYear,
       })}`,
     });
   };
@@ -84,8 +85,8 @@ function Search() {
           min="1900"
           max="2099"
           step="1"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
+          value={selectedYear}
+          onChange={(e) => updateYear(e.target.value)}
         />
         <br />
         <br />
@@ -93,7 +94,7 @@ function Search() {
         <button
           className={styles.button}
           type="submit"
-          disabled={selectedCountry ? false : true}
+          disabled={selectedCountry.name ? false : true}
         >
           Get me some info!
         </button>

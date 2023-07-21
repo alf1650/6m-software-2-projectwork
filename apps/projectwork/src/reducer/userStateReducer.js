@@ -1,11 +1,11 @@
 export const initialState = {
-  //starting point
   isLoggedIn: false,
   username: "",
   userCurrency: "SGD",
   countriesList: [],
   selectedCountry: {}, // { name: "", code: "", currency: "" }
-  favs: [], // [{id: "", country: "", start: "", end: "", notes: ""}]
+  selectedYear: "2023",
+  favs: [], // [{id: "", country: "", start: "", end: "", notes: ""}, {...}]
 };
 
 function userStateReducer(state, action) {
@@ -35,6 +35,10 @@ function userStateReducer(state, action) {
     case "UPDATE_COUNTRY":
       console.log("UPDATE_COUNTRY", payload);
       return { ...state, selectedCountry: payload };
+
+    case "UPDATE_YEAR":
+      console.log("UPDATE_YEAR", payload);
+      return { ...state, selectedYear: payload };
 
     case "ADD_FAV":
       console.log("ADD_FAV", payload);

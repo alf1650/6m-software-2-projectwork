@@ -9,11 +9,12 @@ function CurrencyConverter() {
   const [nativeCurrencyName, setNativeCurrencyName] = useState("");
   const [isCurrencyLoading, setIsCurrencyLoading] = useState(false);
 
-  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" ");
+  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" "); //.env contains string with 2 keys, .split to access
   const CONVERTER_API_KEY = API_KEYS_ARRAY[1];
 
   useEffect(() => {
     const fetchNativeCurrency = async () => {
+      //to fetch selected country's native currency
       try {
         const response = await converterAPI.get("/country", {
           headers: { "X-Api-Key": CONVERTER_API_KEY },
@@ -31,6 +32,7 @@ function CurrencyConverter() {
     };
 
     const fetchConvertedAmount = async (fetchedCurrencyCode) => {
+      //to fetch converted amount from $1 user currency to selected country's native currency
       try {
         const response = await converterAPI.get("/convertcurrency", {
           headers: { "X-Api-Key": CONVERTER_API_KEY },
@@ -47,6 +49,7 @@ function CurrencyConverter() {
     };
 
     const currencyConversion = async () => {
+      //runs conversion
       setIsCurrencyLoading(true);
       const fetchedCurrency = await fetchNativeCurrency();
 
@@ -69,7 +72,7 @@ function CurrencyConverter() {
 
     currencyConversion();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCountry, userCurrency]);
+  }, [selectedCountry, userCurrency]); // re-renders on every change of user currency or selected country
 
   return (
     <h4>

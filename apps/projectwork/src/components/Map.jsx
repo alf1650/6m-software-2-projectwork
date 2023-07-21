@@ -13,7 +13,7 @@ function Map() {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
 
-  useEffect(() => {
+  useEffect(() => { //fetch co-ordinates of selected country
     const apiGetCoords = async () => {
       setIsLoading(true);
       setError(false);

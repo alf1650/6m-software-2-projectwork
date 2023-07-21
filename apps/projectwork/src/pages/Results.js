@@ -9,8 +9,14 @@ import useUserState from "../store/userStateContext";
 import CurrencyConverter from "../components/CurrencyConverter";
 
 function Results() {
-  const { selectedCountry, countriesList, updateCountry, addFav } =
-    useUserState();
+  const {
+    selectedCountry,
+    countriesList,
+    updateCountry,
+    selectedYear,
+    updateYear,
+    addFav,
+  } = useUserState();
 
   const [holidaysData, setHolidaysData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,16 +24,16 @@ function Results() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const [searchedCountryCode] = useState(searchParams.get("country"));
-  const [searchedYear] = useState(searchParams.get("year"));
+  const [searchedCountryCode] = useState(searchParams.get("country")); //reading from URL query string
+  const [searchedYear] = useState(searchParams.get("year")); //reading from URL query string
   const [startDate, setStartDate] = useState(`${searchedYear}-01-01`);
   const [endDate, setEndDate] = useState(`${searchedYear}-12-31`);
 
-  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" ");
+  const API_KEYS_ARRAY = process.env.REACT_APP_API_KEY.split(" "); //.env contains string with 2 keys, .split to access
   const COUNTRY_API_KEY = API_KEYS_ARRAY[0];
 
   const filteredData = holidaysData.filter(
-    (data) => data.date.iso > startDate && data.date.iso < endDate
+    (data) => data.date.iso > startDate && data.date.iso < endDate //displays holidays data by date range
   );
 
   const getSelectedCountryFullName = (searchedCountryCode) => {
@@ -45,7 +51,7 @@ function Results() {
           params: {
             api_key: COUNTRY_API_KEY,
             country: searchedCountryCode,
-            year: searchedYear,
+            year: selectedYear,
           },
         });
         if (!response.data.response) {
@@ -55,10 +61,10 @@ function Results() {
           setHolidaysData(response.data.response.holidays);
           updateCountry({
             ...selectedCountry,
-            // name: getSelectedCountryFullName(searchedCountryCode),
             name: getSelectedCountryFullName(searchedCountryCode),
             code: searchedCountryCode,
           });
+          updateYear(searchedYear);
           setIsLoading(false);
         }
       } catch (error) {
@@ -91,26 +97,24 @@ function Results() {
         {`« Back to Search`}
       </button>
       <p className={styles.title}>
-        {`Travel to ${selectedCountry.name} in ${searchedYear}`}
+        {`Travel to ${selectedCountry.name} in ${selectedYear}`}
         <button className={styles.add} onClick={handleAdd}>
           {buttonText}
         </button>
       </p>
-      <h1>{`${selectedCountry.name} Holidays in ${searchedYear}`}</h1>
+      <h1>{`${selectedCountry.name} Holidays in ${selectedYear}`}</h1>
       <label>From: </label>
       <input
         type="date"
         value={startDate}
-        min={`${searchedYear}-01-01`}
-        max={`${searchedYear}-12-30`}
+        onKeyDown={(e) => e.preventDefault()}
         onChange={(e) => setStartDate(e.target.value)}
       />
       <label> To: </label>
       <input
         type="date"
         value={endDate}
-        min={`${searchedYear}-01-02`}
-        max={`${searchedYear}-12-31`}
+        onKeyDown={(e) => e.preventDefault()}
         onChange={(e) => setEndDate(e.target.value)}
       />
       <br />

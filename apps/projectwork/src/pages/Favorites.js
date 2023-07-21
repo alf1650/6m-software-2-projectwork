@@ -11,10 +11,10 @@ const sampleTexts = [
   "e.g. To arrange..",
   "e.g. A good option..",
   "e.g. To consider..",
-];
+]; //placeholders
 
 const getRandomInt = () => {
-  return Math.floor(Math.random() * sampleTexts.length);
+  return Math.floor(Math.random() * sampleTexts.length); //displays random placeholders
 };
 
 function Favorites() {

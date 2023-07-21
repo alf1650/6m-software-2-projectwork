@@ -15,6 +15,7 @@ function Navbar() {
 
   return (
     <nav className={styles.navbar}>
+      {/*navbar is to be blank on login page, before user logs in*/}
       {isLoggedIn && (
         <>
           <div>

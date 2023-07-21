@@ -31,6 +31,10 @@ export function UserStateProvider({ children }) {
     dispatch({ type: "UPDATE_COUNTRY", payload: country });
   };
 
+  const updateYear = (year) => {
+    dispatch({ type: "UPDATE_YEAR", payload: year });
+  };
+
   const addFav = (fav) => {
     const newFavArr = [...state.favs, fav];
     dispatch({ type: "ADD_FAV", payload: newFavArr });
@@ -56,12 +60,14 @@ export function UserStateProvider({ children }) {
     userCurrency: state.userCurrency,
     countriesList: state.countriesList,
     selectedCountry: state.selectedCountry,
+    selectedYear: state.selectedYear,
     favs: state.favs,
     updateLogIn,
     updateUsername,
     updateUserCurrency,
     updateCountriesList,
     updateCountry,
+    updateYear,
     addFav,
     updateFavNotes,
     deleteFav,
@@ -77,11 +83,10 @@ export function UserStateProvider({ children }) {
 const useUserState = () => {
   const context = useContext(UserStateContext);
   if (context === undefined) {
-    throw new Error("useUserState must be used within UserStateContext");
+    throw new Error("useUserState must be used within UserStateProvider");
   }
   return context;
 };
-//custom hook to check & error if context is used outside it's provider,
-//instead of allowing 'useContext' calls directly in components
+//custom hook to check & error if context is used outside it's provider, instead of allowing 'useContext' calls directly in components
 
 export default useUserState;
